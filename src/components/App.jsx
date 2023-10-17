@@ -1,13 +1,21 @@
 // import React, { useEffect } from 'react';
-import { StyledAppContainer } from './App.styled';
+import { Suspense, lazy } from 'react';
+// import { StyledAppContainer } from './App.styled';
 // import { fetchPosts, findPostById } from '../servise/api';
 // import { DeteilsSection } from './DeteilsSection';
+import { StyledAppContainer, StyledNavLink } from './App.styled';
+import Loader from 'components/Loader';
 
-import { NavLink, Route, Routes } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
-import PostsPage from '../pages/PostsPage';
-import SearchPage from '../pages/SearchPage';
-import PostDetailPage from 'pages/PostDetailPage';
+import { Route, Routes } from 'react-router-dom';
+// import HomePage from '../pages/HomePage';
+// import PostsPage from '../pages/PostsPage';
+// import SearchPage from '../pages/SearchPage';
+// import PostDetailPage from 'pages/PostDetailPage';
+const HomePage = lazy(() => import('pages/HomePage'));
+const PostsPage = lazy(() => import('pages/PostsPage'));
+const SearchPage = lazy(() => import('pages/SearchPage'));
+const PostDetailsPage = lazy(() => import('pages/PostDetailPage'));
+
 /*
 Маршрутизація:
 
@@ -24,76 +32,31 @@ import PostDetailPage from 'pages/PostDetailPage';
 */
 
 export const App = () => {
-  // const [posts, setPosts] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
-  // const [searchedPostId, setSearchedPostId] = useState(null);
-
-  // useEffect(() => {
-  //   fetchAllPosts();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!searchedPostId) return;
-  //   const fetchPostById = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       const post = await findPostById(searchedPostId);
-  //       setPosts([post]);
-  //     } catch (error) {
-  //       setError(error.message);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchPostById();
-  // }, [searchedPostId]);
-
-  // const fetchAllPosts = async () => {
-  //   try {
-  //     setIsLoading(true);
-  //     const postsData = await fetchPosts();
-
-  //     setPosts(postsData);
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const handleSubmitSearch = event => {
-  //   event.preventDefault();
-  //   const searchedPostIdValue = event.currentTarget.elements.searchPostId.value;
-  //   setSearchedPostId(searchedPostIdValue);
-  //   event.currentTarget.reset();
-  // };
-
   return (
     <StyledAppContainer>
       <header>
         <nav>
-          <NavLink className="header-link" to="/">
+          <StyledNavLink className="header-link" to="/">
             Home
-          </NavLink>
-          <NavLink className="header-link" to="/posts">
+          </StyledNavLink>
+          <StyledNavLink className="header-link" to="/posts">
             Posts
-          </NavLink>
-          <NavLink className="header-link" to="/search">
+          </StyledNavLink>
+          <StyledNavLink className="header-link" to="/search">
             Search
-          </NavLink>
+          </StyledNavLink>
         </nav>
       </header>
 
-      {/* <h1 className="title" tabIndex={0}>
-        App title
-      </h1> */}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/posts" element={<PostsPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/posts-detail/:postId/*" element={<PostDetailPage />} />
-      </Routes>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/posts" element={<PostsPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          {/* /posts/d12dWAF@ */}
+          <Route path="/post-details/:postId/*" element={<PostDetailsPage />} />
+        </Routes>
+      </Suspense>
     </StyledAppContainer>
   );
 };

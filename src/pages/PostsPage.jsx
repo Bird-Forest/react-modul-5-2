@@ -10,21 +10,20 @@ export default function PostsPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const fetchAllPosts = async () => {
+      try {
+        setIsLoading(true);
+        const postsData = await fetchPosts();
+
+        setPosts(postsData);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     fetchAllPosts();
   }, []);
-
-  const fetchAllPosts = async () => {
-    try {
-      setIsLoading(true);
-      const postsData = await fetchPosts();
-
-      setPosts(postsData);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div>
