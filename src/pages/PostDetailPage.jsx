@@ -16,7 +16,9 @@ const CommentPage = lazy(() => import('pages/CommentPage'));
 
 export default function PostDetailPage() {
   const { postId } = useParams();
+
   const location = useLocation();
+  console.log(location);
   const backLinkHref = useRef(location.state?.from ?? '/');
 
   const [postDetails, setPostDetails] = useState(null);

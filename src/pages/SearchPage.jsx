@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ReactComponent as IconSearch } from '../components/search.svg';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { findPostById } from 'servise/api';
 import Loader from 'components/Loader';
 import ErrorMessage from 'components/Error';
@@ -24,6 +24,9 @@ export default function SearchPage() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const location = useLocation();
+  // console.log(location);
 
   useEffect(() => {
     if (!query) return;
@@ -64,7 +67,7 @@ export default function SearchPage() {
         {error && <ErrorMessage message={error} />}
         {posts !== null && (
           <Link
-            // state={{ from: location }}
+            state={{ from: location }}
             to={`/post-details/${posts.id}`}
             key={posts.id}
           >
